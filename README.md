@@ -1,6 +1,5 @@
 # docsify-blog
 
-[如何使用docsify搭建文档类型的博客网站](https://mp.weixin.qq.com/s/TPXHaTdfTYKrcpm77gPHyA)
 - [我的docsify搭建文档类型的博客网站(Github)](https://xumingyu2018.github.io/docsify-blog/)
 
 
