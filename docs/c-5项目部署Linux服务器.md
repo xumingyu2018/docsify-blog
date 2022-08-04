@@ -6,7 +6,7 @@
 
 **反向代理访问tomcat默认流程(访问ROOT)**
 
-![](image/反向代理访问tomcat默认流程(访问ROOT)\_ MsPG0-s17B.PNG)
+![](image/反向代理访问tomcat默认流程(访问ROOT)_MsPG0-s17B.PNG)
 
 **删除tomcat中ROOT把community打包命名为ROOT**
 
