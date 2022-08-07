@@ -1,6 +1,4 @@
----
-theme: channing-cyan
----
+
 # Java8新特性
 
 ![新特性.PNG](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bebf3242d1114105b1a6b9533d17bcee~tplv-k3u1fbpfcp-watermark.image?)
