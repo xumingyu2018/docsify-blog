@@ -1,4 +1,3 @@
-
 # Java8新特性
 
 ![新特性.PNG](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bebf3242d1114105b1a6b9533d17bcee~tplv-k3u1fbpfcp-watermark.image?)
@@ -12,7 +11,6 @@
 #### JDK1.8之后：
 
 `Entry`数组 + 链表 +红黑树(更好解决冲突)，hash值和key值（通过`equal`比较后不同时）不同则：当链表长度大于阈值（默认为 8）（将链表转换成红黑树前会判断，如果当前数组的总长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树，即链表长度>8，总容量>64）时，将链表转化为红黑树（动态平衡二叉树），以减少搜索时间。
-
 
 ## CurrentHashMap
 
@@ -39,112 +37,116 @@ Segment 实现了 `ReentrantLock`,所以 `Segment` 是一种可重入锁，扮�
 
 ![4.PNG](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8f64533886c84e6dbb0f3d33e2ae742d~tplv-k3u1fbpfcp-watermark.image?)
 
-### 1.Java8之前（HotPot）
+#### 1.Java8之前（HotPot）
 
--   方法区属于堆中永久区（`PremGen`）的一部分（存类加载的一些信息及核心类库，几乎不会被垃圾回收机制回收）
+- 方法区属于堆中永久区（`PremGen`）的一部分（存类加载的一些信息及核心类库，几乎不会被垃圾回收机制回收）
 
-### 2.Java8之后
+#### 2.Java8之后
 
--   永久区被取代为元空间（MetaSpace)，特点：物理内存，从而垃圾回收几率低（内存满时回收），OOM内存溢出发生概率小
+- 永久区被取代为元空间（MetaSpace)，特点：物理内存，从而垃圾回收几率低（内存满时回收），OOM内存溢出发生概率小
 
 ## Lambda表达式
 
-### 基础语法：左侧为参数列表，右侧为需要执行的功能，即Lambda体
+### 基础语法
 
--   无参数，无返回值
+#### 左侧为参数列表，右侧为需要执行的功能，即Lambda体
 
-    ```
-     () -> System.out.println("Lambda!!");
-    ```
+- 无参数，无返回值
 
--   有一个参数，无返回值（只有一个参数时，括号可省略）
+```
+ () -> System.out.println("Lambda!!");
+```
 
-    ```
-     (x) -> System.out.println(x);    x -> System.out.println(x)
-    ```
+- 有一个参数，无返回值（只有一个参数时，括号可省略）
 
--   2个及以上参数，有返回值，且Lambda体中有多条语句
+```
+ (x) -> System.out.println(x);    x -> System.out.println(x)
+```
 
-    ```
-     Comparator<Integer> com =(x, y) -> {
-         system.out.println("函数式接口");  
-         return Integer.compare(x, y);
-     }
-    ```
+- 2个及以上参数，有返回值，且Lambda体中有多条语句
 
--   Lambda体中只有1条语句，return和大括号都可省略
+```
+ Comparator<Integer> com =(x, y) -> {
+     system.out.println("函数式接口");  
+     return Integer.compare(x, y);
+ }
+```
 
-    ```
-     Comparator<Integer> com =(x, y) -> Integer.compare(x, y);
-    ```
+- Lambda体中只有1条语句，return和大括号都可省略
 
--   Lambda表达式的参数列表的数据类型可以省略，JVM编译器通过上下文推断出数据类型，即类型推断
+```
+ Comparator<Integer> com =(x, y) -> Integer.compare(x, y);
+```
 
-    ```
-     (Integer x,Integer y) -> Integer.compare(x, y);
-    ```
+- Lambda表达式的参数列表的数据类型可以省略，JVM编译器通过上下文推断出数据类型，即类型推断
 
-### 替代匿名内部类（只要方法的参数是函数式接口都可以用 Lambda 表达式）
+```
+ (Integer x,Integer y) -> Integer.compare(x, y);
+```
+
+### 替代匿名内部类
+
+#### (只要方法的参数是函数式接口都可以用 Lambda 表达式)
 
 **函数式接口：** 即接口中只有一个抽象方法的接口，可以使用`@FunctionalInterface`修饰
 
 #### 1.Runnable 接口
 ```
- new Thread(new Runnable() {
-       @Override
-       public void run() {
-           System.out.println("The runable now is using!");
-       }
- }).start();
- //用lambda
- new Thread(() -> System.out.println("It's a lambda function!")).start();
+ new Thread(new Runnable() {
+       @Override
+       public void run() {
+           System.out.println("The runable now is using!");
+       }
+ }).start();
+ //用lambda
+ new Thread(() -> System.out.println("It's a lambda function!")).start();
 ```
 
 #### 2.Comperator 接口
 
 ```
- // 示例1
- Comparator<Integer> com = new Comparator<Integer>() {
-         @@Override
-         public int compare(Integer o1, Integer o2) {
-             return Integer.compare(o1, o2);
-         }
- }
- //Lambda(1条语句)
- Comparator<Integer> com =(x, y) -> Integer.compare(o1, o2);
- 
- //Lambda(多条语句)
- Comparator<Integer> com =(x, y) -> {
-     system.out.println("Lambda");  
-     return Integer.compare(o1, o2);
- }
- 
- //示例2
- List<Integer> strings = Arrays.asList(1, 2, 3);
- 
- Collections.sort(strings, new Comparator<Integer>() {
- @Override
- public int compare(Integer o1, Integer o2) {
-     return o1 - o2;}
- });
- 
- //Lambda
- Collections.sort(strings, (Integer o1, Integer o2) -> o1 - o2);
- //分解开
- Comparator<Integer> comperator = (Integer o1, Integer o2) -> o1 - o2;
- Collections.sort(strings, comperator);
+ // 示例1
+ Comparator<Integer> com = new Comparator<Integer>() {
+         @@Override
+         public int compare(Integer o1, Integer o2) {
+             return Integer.compare(o1, o2);
+         }
+ }
+ //Lambda(1条语句)
+ Comparator<Integer> com =(x, y) -> Integer.compare(o1, o2);
+ ​
+ //Lambda(多条语句)
+ Comparator<Integer> com =(x, y) -> {
+     system.out.println("Lambda");  
+     return Integer.compare(o1, o2);
+ }
+ ​
+ //示例2
+ List<Integer> strings = Arrays.asList(1, 2, 3);
+ ​
+ Collections.sort(strings, new Comparator<Integer>() {
+ @Override
+ public int compare(Integer o1, Integer o2) {
+     return o1 - o2;}
+ });
+ ​
+ //Lambda
+ Collections.sort(strings, (Integer o1, Integer o2) -> o1 - o2);
+ //分解开
+ Comparator<Integer> comperator = (Integer o1, Integer o2) -> o1 - o2;
+ Collections.sort(strings, comperator);
 ```
 #### 3.Listener 接口
 ```
- JButton button = new JButton();
- button.addItemListener(new ItemListener() {
- @Override
- public void itemStateChanged(ItemEvent e) {
-    e.getItem();
- }
- });
- //lambda
- button.addItemListener(e -> e.getItem());
+ JButton button = new JButton();
+ button.addItemListener(new ItemListener() {
+ @Override
+ public void itemStateChanged(ItemEvent e) {
+    e.getItem();
+ }
+ });
+ //lambda
+ button.addItemListener(e -> e.getItem());
 ```
 
 #### 4.自定义函数式接口
@@ -203,15 +205,14 @@ void lamndaFor() {
 ```
 ### 其他函数式接口
 
-
 ![5.PNG](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ebe37223bd1f47bf9162d9411221b6bb~tplv-k3u1fbpfcp-watermark.image?)
 
 ### 四大内置核心函数式接口
 
--   `Consumer<T>`：消费型接口 `void accept(T t);`
--   `Supplier<T>`：供给型接口 `T get();`
--   `Function<T, R>`：函数型接口 `R apply(T t);`
--   `Predicate<T>`：断言型接口 `boolean test(T t);`
+- `Consumer<T>`：消费型接口 `void accept(T t);`
+- `Supplier<T>`：供给型接口 `T get();`
+- `Function<T, R>`：函数型接口 `R apply(T t);`
+- `Predicate<T>`：断言型接口 `boolean test(T t);`
 
 ```
     //    消费型接口 Consumer<T>     void accept(T t)
@@ -433,7 +434,7 @@ public void test() {
 }
 ```
 
-### 特点：
+### 特点
 
 1.  通过简单的链式编程，使得它可以方便地对遍历处理后的数据进行再处理
 0.  方法参数都是函数式接口类型
@@ -564,8 +565,8 @@ LocalTime.parse("12:12:22");
 
 ### 时间格式线程安全问题
 
-
 ![6.PNG](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e2f18fb55d014bba98a8ff4e5877cda8~tplv-k3u1fbpfcp-watermark.image?)
+
 ## 接口的默认实现方法和静态方法
 
 -   **类优先原则**：如果一个父类提供了具体实现方法，那么接口中具有相同名称和参数的默认实现方法会被忽略。 
